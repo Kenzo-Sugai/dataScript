@@ -1,10 +1,22 @@
+from json import dumps
+listparser = [
+
+    'room_number', 'capacity', 'budget', 'credits', 'salary', 'year', 'tot_cred', 'start_hr', 'start_min', 'end_min'
+
+]
+
 def transformNoSQL(columnName, columnHeader, data):
     dicData = {}
 
     for i in range(len(data)):
-        dicData[columnHeader[columnName][i]] = data[i]
+        if(columnHeader[columnName][i] in listparser):
+            dicData[columnHeader[columnName][i]] = int(data[i])
+        else:
+            dicData[columnHeader[columnName][i]] = data[i]
     
-    print(dicData)
+    print(f"db.getCollection('{columnName}').insertOne([")
+    print(dumps(dicData))
+    print(']);')
 
 def readFile(columnHeader):
     arq = open("smallRelationsInsertFile.sql", "r")
