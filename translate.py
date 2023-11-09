@@ -1,9 +1,8 @@
 from json import dumps
-listparser = [
 
-    'room_number', 'capacity', 'budget', 'credits', 'salary', 'year', 'tot_cred', 'start_hr', 'start_min', 'end_min'
+output = open('output.txt', 'w')
 
-]
+listparser = ['room_number', 'capacity', 'budget', 'credits', 'salary', 'year', 'tot_cred', 'start_hr', 'start_min', 'end_min']
 
 def transformNoSQL(columnName, columnHeader, data):
     dicData = {}
@@ -14,9 +13,13 @@ def transformNoSQL(columnName, columnHeader, data):
         else:
             dicData[columnHeader[columnName][i]] = data[i]
     
-    print(f"db.getCollection('{columnName}').insertOne([")
+    output.write(f"db.getCollection('{columnName}').insertOne(\n")
+    output.write(dumps(dicData)+'\n')
+    output.write(");\n")
+
+    print(f"db.getCollection('{columnName}').insertOne(")
     print(dumps(dicData))
-    print(']);')
+    print(";")
 
 def readFile(columnHeader):
     arq = open("smallRelationsInsertFile.sql", "r")
@@ -77,3 +80,4 @@ columns = {
 }
 
 readFile(columns)
+output.close()
